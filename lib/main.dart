@@ -1,9 +1,15 @@
-import 'package:fixmate/di/injection.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:fixmate/core/di/injection.dart';
+import 'package:fixmate/core/router/app_router.dart';
+import 'package:fixmate/firebase_options.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await configureDependencies();
   runApp(const FixMate());
 }
 
@@ -12,16 +18,10 @@ class FixMate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hello, world!'),
-        ),
-      ),
+    return MaterialApp.router(
+      title: 'FixMate',
+      debugShowCheckedModeBanner: false,
+      routerConfig: getIt<AppRouter>().config(),
     );
   }
 }
